@@ -15,7 +15,7 @@ use Scalar::Util qw(looks_like_number);
 #use Error qw(:try);
 
 use constant {
-	EZOORP_I2C_ADDRESS => '0x63',
+	EZOORP_I2C_ADDRESS => '0x62',
 };
 
 sub I2C_EZOORP_Initialize($);
@@ -30,9 +30,9 @@ my %sets = (
 	"readValues" => 1,
 #	"TemperaturCompensation" => "",
 	"CalibrateReset" => 1,
-	"CalibrateLow" => "",
-	"CalibrateMiddle" => "",
-	"CalibrateHigh" => "",
+	"Calibrate" => "",
+#	"CalibrateMiddle" => "",
+#	"CalibrateHigh" => "",
 );
 
 sub I2C_EZOORP_Initialize($) {
@@ -160,19 +160,19 @@ sub I2C_EZOORP_Set($@) {
 	}
 	#if ($cmd eq "TemperaturCompensation") { # to be removed TemperaturCompensation is not neccesarry with ORP
 	#	I2C_SET_PHTEMPCOMP($hash,$val);
-	}
+	#}
 	if ($cmd eq "CalibrateReset") {
-		I2C_SET_ORPTCALRESET($hash);
+		I2C_SET_ORPCALRESET($hash);
 	}
-	if ($cmd eq "CalibrateLow") {
-		I2C_SET_ORPCALLOW($hash,$val);
+	if ($cmd eq "Calibrate") {
+		I2C_SET_ORPCAL($hash,$val);
 	}
-	if ($cmd eq "CalibrateMiddle") {
-		I2C_SET_ORPCALMID($hash,$val);
-	}
-	if ($cmd eq "CalibrateHigh") {
-		I2C_SET_ORPCALHIGH($hash,$val);
-	}
+	#if ($cmd eq "CalibrateMiddle") {
+	#	I2C_SET_ORPCALMID($hash,$val);
+	#}
+	#if ($cmd eq "CalibrateHigh") {
+	#	I2C_SET_ORPCALHIGH($hash,$val);
+	#}
 }
 
 sub I2C_EZOORP_Undef($$) {
