@@ -202,7 +202,7 @@ sub I2C_EZOORP_I2CRec ($$) {
 			my @split1 = split(",", $new);
 
 			readingsBeginUpdate($hash);
-			readingsBulkUpdate($hash,'state','S: ' . $erster . ' ORP: ' . $split1[0]);
+			readingsBulkUpdate($hash,'state','S: ' . $erster . ' Redox: ' . $split1[0]);
 			readingsBulkUpdate($hash, 'mV', $split1[0]);
 			readingsBulkUpdate($hash, 'Status', $erster);
 			readingsEndUpdate($hash, 1);
