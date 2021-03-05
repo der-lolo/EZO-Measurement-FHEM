@@ -4,7 +4,7 @@ use File::Basename;
 use POSIX qw(strftime);
 use strict;
 
-my @filenames = ( "52_I2C_EZOPH.pm" "52_I2C_EZOORP.pm" "52_I2C_EZOPRS.pm");
+my @filenames = ( "52_I2C_EZOPH.pm","52_I2C_EZOORP.pm","52_I2C_EZOPRS.pm");
 
 my $prefix = "FHEM";
 my $filename = "";
@@ -25,8 +25,9 @@ foreach $filename (@filenames)
 
   my $filesize = $statOutput[7];
 
-  printf("UPD ".$filetime." ".$filesize." ".$prefix."/".$filename."\n");
-  open (DATEI, ">controls_aquarea.txt") or die $!;
-  print DATEI "UPD ".$filetime." ".$filesize." ".$prefix."/".$filename."\n";
+
+  open (DATEI, ">controls_ezoDevices.txt") or die $!;
+  print DATEI ("UPD ".$filetime." ".$filesize." ".$prefix."/".$filename."\n");
   close (DATEI);
+  printf("UPD ".$filetime." ".$filesize." ".$prefix."/".$filename."\n");
 }
