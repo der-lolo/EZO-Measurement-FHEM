@@ -3,7 +3,7 @@
 # Based on the I2C_SHT21 Modul from klauswitt
 # Thanks to Klaus Witt for help
 # working copy from der-lolo@pm.me
-#
+
 
 package main;
 
