@@ -156,7 +156,7 @@ sub I2C_EZOORP_Set($@) {
 	}
 
 	if ($cmd eq "readValues") {
-		I2C_EZOORP_readpH($hash);
+		I2C_EZOORP_readORP($hash);
 	}
 	#if ($cmd eq "TemperaturCompensation") { # to be removed TemperaturCompensation is not neccesarry with ORP
 	#	I2C_SET_PHTEMPCOMP($hash,$val);
