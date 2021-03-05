@@ -4,10 +4,10 @@ use File::Basename;
 use POSIX qw(strftime);
 use strict;
 
-my @filenames = ( "67_Aquarea.pm" );
+my @filenames = ( "52_I2C_EZOPH.pm" "52_I2C_EZOORP.pm" "52_I2C_EZOPRS.pm");
 
 my $prefix = "FHEM";
-my $filename = "67_Aquarea.pm";
+my $filename = "";
 foreach $filename (@filenames)
 {
   my @statOutput = stat($prefix."/".$filename);
