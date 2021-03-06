@@ -376,7 +376,7 @@ sub I2C_SET_PHSLEEP($) {
     my $pname = $phash->{NAME};
 #	  my $sleep = $val eq "on" ? 1 : $val eq "off" ? 0 : return;
 
-	my $sleepmode = "active";
+	my $sleepmode = "Sleep";
 	my @sleepmodeascii = unpack("c*", $sleepmode); # Wandle String nach ASCII um
 	my $asciistring = join(" ",@sleepmodeascii);
 
@@ -384,7 +384,7 @@ sub I2C_SET_PHSLEEP($) {
     $i2creq->{data} = $asciistring;
 	CallFn($pname, "I2CWrtFn", $phash, $i2creq);
 
-	readingsSingleUpdate($hash,"Sleepmode", $sleepmode, 1);
+	readingsSingleUpdate($hash,"Sleepmode", "active", 1);
 
 	return;
 }
