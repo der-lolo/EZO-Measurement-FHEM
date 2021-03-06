@@ -382,7 +382,7 @@ sub I2C_SET_PHSLEEP($) {
     $i2creq->{data} = $asciistring;
 	CallFn($pname, "I2CWrtFn", $phash, $i2creq);
 
-	readingsSingleUpdate($hash,"Sleepmode", "1", 1);
+	readingsSingleUpdate($hash,"Sleepmode", 1, 1);
 
 	return;
 }
