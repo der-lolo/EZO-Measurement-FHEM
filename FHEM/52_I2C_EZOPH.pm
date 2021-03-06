@@ -33,6 +33,7 @@ my %sets = (
 	"CalibrateLow" => "",
 	"CalibrateMiddle" => "",
 	"CalibrateHigh" => "",
+	"sleep" => "",
 );
 
 sub I2C_EZOPH_Initialize($) {
