@@ -173,6 +173,9 @@ sub I2C_EZOPH_Set($@) {
 	if ($cmd eq "CalibrateHigh") {
 		I2C_SET_PHCALHIGH($hash,$val);
 	}
+	if ($cmd eq "sleep") {
+		I2C_SET_PHSLEEP($hash,$val);
+	}
 }
 
 sub I2C_EZOPH_Undef($$) {
@@ -354,6 +357,27 @@ sub I2C_SET_PHCALHIGH($) {
 	usleep(1300000); # Warte 1,3 Sekunden bis Messung abgeschlossen ist.
 
 	readingsSingleUpdate($hash,"Set_pHCalHigh", $phcalhigh, 1);
+
+	return;
+}
+
+sub I2C_Set_PHSLEEP($) {
+	my ($hash,$val) = @_;
+	my $name = $hash->{NAME};
+  	return "$name: no IO device defined" unless ($hash->{IODev});
+  	my $phash = $hash->{IODev};
+    my $pname = $phash->{NAME};
+	#my $sleep = $val eq "on" ? 1 : $val eq "off" ? 0 : return;
+
+	my $sleepmode = "Sleep";
+	my @sleepmodeascii = unpack("c*", $sleepmode); # Wandle String nach ASCII um
+	my $asciistring = join(" ",@sleepmodeascii);
+
+	my $i2creq = { i2caddress => $hash->{I2C_Address}, direction => "i2cwrite" };
+    $i2creq->{data} = $asciistring;
+	CallFn($pname, "I2CWrtFn", $phash, $i2creq);
+
+	#readingsSingleUpdate($hash,"Set_DebugLED", $debugled, 1);
 
 	return;
 }
