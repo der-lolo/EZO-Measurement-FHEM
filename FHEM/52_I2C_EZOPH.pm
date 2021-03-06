@@ -138,9 +138,9 @@ sub I2C_EZOPH_Attr (@) {
 sub I2C_EZOPH_Poll($) {
 	my ($hash) =  @_;
 	my $name = $hash->{NAME};
-
+	if ($sleepmode eq ""){
 	I2C_EZOPH_Set($hash, ($name, "readValues"));
-
+}
 	my $pollInterval = AttrVal($hash->{NAME}, 'poll_interval', 0);
 	if ($pollInterval > 0) {
 		InternalTimer(gettimeofday() + $pollInterval, 'I2C_EZOPH_Poll', $hash, 0);
@@ -376,7 +376,7 @@ sub I2C_SET_PHSLEEP($) {
     my $pname = $phash->{NAME};
 #	  my $sleep = $val eq "on" ? 1 : $val eq "off" ? 0 : return;
 
-	my $sleepmode = "Sleep";
+	my $sleepmode = "active";
 	my @sleepmodeascii = unpack("c*", $sleepmode); # Wandle String nach ASCII um
 	my $asciistring = join(" ",@sleepmodeascii);
 
