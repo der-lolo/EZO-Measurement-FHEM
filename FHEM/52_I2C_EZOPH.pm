@@ -362,7 +362,7 @@ sub I2C_SET_PHCALHIGH($) {
 	return;
 }
 
-sub I2C_Set_PHSLEEP($) {
+sub I2C_SET_PHSLEEP($) {
 	my ($hash,$val) = @_;
 	my $name = $hash->{NAME};
   	return "$name: no IO device defined" unless ($hash->{IODev});
