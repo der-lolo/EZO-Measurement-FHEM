@@ -232,7 +232,7 @@ sub I2C_EZOPH_readpH($) {
     $i2cread->{nbyte} = 14;
 	$i2cread->{type} = "pH";
 	CallFn($pname, "I2CWrtFn", $phash, $i2cread);
-	readingsSingleUpdate($hash,"Sleepmode", "0", 0);
+	readingsSingleUpdate($hash,"Sleepmode", 0, 0);
 	return;
 }
 
