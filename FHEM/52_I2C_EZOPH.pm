@@ -35,6 +35,7 @@ my %sets = (
 	"CalibrateHigh" => "",
 	"sleep" => "",
 );
+my $sleepmode = "";
 
 sub I2C_EZOPH_Initialize($) {
 	my ($hash) = @_;
