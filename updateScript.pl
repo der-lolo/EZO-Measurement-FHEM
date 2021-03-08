@@ -8,6 +8,7 @@ my @filenames = ( "52_I2C_EZOPH.pm","52_I2C_EZOORP.pm","52_I2C_EZOPRS.pm","CHANG
 
 my $prefix = "FHEM";
 my $filename = "";
+open (DATEI, ">controls_ezoDevices.txt") or die $!;
 foreach $filename (@filenames)
 {
   my @statOutput = stat($prefix."/".$filename);
@@ -26,8 +27,8 @@ foreach $filename (@filenames)
   my $filesize = $statOutput[7];
 
 
-  open (DATEI, ">controls_ezoDevices.txt") or die $!;
+#  open (DATEI, ">controls_ezoDevices.txt") or die $!;
   print DATEI ("UPD ".$filetime." ".$filesize." ".$prefix."/".$filename."\n");
-  close (DATEI);
+#  close (DATEI);
   printf("UPD ".$filetime." ".$filesize." ".$prefix."/".$filename."\n");
 }
