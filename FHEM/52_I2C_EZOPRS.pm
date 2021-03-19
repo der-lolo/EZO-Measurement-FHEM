@@ -154,7 +154,7 @@ sub I2C_EZOPRS_Set($@) {
 	}
 
 	if ($cmd eq "readValues") {
-		I2C_EZOPRS_readpH($hash);
+		I2C_EZOPRS_readpressure($hash);
 	}
 	if ($cmd eq "pressureUnit") {
 		I2C_SET_PRSUNITSET($hash,$val);
