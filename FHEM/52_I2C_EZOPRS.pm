@@ -26,7 +26,7 @@ sub I2C_EZOPRS_DbLog_splitFn($);
 
 my %sets = (
 	"readValues" => 1,
-#	"pressureUnit" => "",
+	"pressureUnit" => "",
 #	"CalibrateReset" => 1,
 #	"CalibrateLow" => "",
 #	"CalibrateMiddle" => "",
