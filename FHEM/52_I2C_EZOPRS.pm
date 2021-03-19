@@ -13,7 +13,7 @@ use Scalar::Util qw(looks_like_number);
 #use Error qw(:try);
 
 use constant {
-	EZOPH_I2C_ADDRESS => '0x63',
+	EZOPH_I2C_ADDRESS => '0x6A',
 };
 
 sub I2C_EZOPH_Initialize($);
