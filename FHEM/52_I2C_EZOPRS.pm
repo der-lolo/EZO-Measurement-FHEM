@@ -13,16 +13,16 @@ use Scalar::Util qw(looks_like_number);
 #use Error qw(:try);
 
 use constant {
-	EZOPH_I2C_ADDRESS => '0x6A',
+	EZOPRS_I2C_ADDRESS => '0x6A',
 };
 
-sub I2C_EZOPH_Initialize($);
-sub I2C_EZOPH_Define($$);
-sub I2C_EZOPH_Attr(@);
-sub I2C_EZOPH_Poll($);
-sub I2C_EZOPH_Set($@);
-sub I2C_EZOPH_Undef($$);
-sub I2C_EZOPH_DbLog_splitFn($);
+sub I2C_EZOPRS_Initialize($);
+sub I2C_EZOPRS_Define($$);
+sub I2C_EZOPRS_Attr(@);
+sub I2C_EZOPRS_Poll($);
+sub I2C_EZOPRS_Set($@);
+sub I2C_EZOPRS_Undef($$);
+sub I2C_EZOPRS_DbLog_splitFn($);
 
 my %sets = (
 	"readValues" => 1,
@@ -33,49 +33,49 @@ my %sets = (
 	"CalibrateHigh" => "",
 );
 
-sub I2C_EZOPH_Initialize($) {
+sub I2C_EZOPRS_Initialize($) {
 	my ($hash) = @_;
 
-	$hash->{DefFn}    = 'I2C_EZOPH_Define';
-	$hash->{InitFn}   = 'I2C_EZOPH_Init';
-	$hash->{AttrFn}   = 'I2C_EZOPH_Attr';
-	$hash->{SetFn}    = 'I2C_EZOPH_Set';
-	$hash->{UndefFn}  = 'I2C_EZOPH_Undef';
-	$hash->{I2CRecFn} = 'I2C_EZOPH_I2CRec';
+	$hash->{DefFn}    = 'I2C_EZOPRS_Define';
+	$hash->{InitFn}   = 'I2C_EZOPRS_Init';
+	$hash->{AttrFn}   = 'I2C_EZOPRS_Attr';
+	$hash->{SetFn}    = 'I2C_EZOPRS_Set';
+	$hash->{UndefFn}  = 'I2C_EZOPRS_Undef';
+	$hash->{I2CRecFn} = 'I2C_EZOPRS_I2CRec';
 	$hash->{AttrList} = 'IODev do_not_notify:0,1 showtime:0,1 poll_interval:2,5,10,30,60,300,600,1800,3600 ' .
 						'DebugLED:on,off ' .
 						$readingFnAttributes;
-    $hash->{DbLog_splitFn} = "I2C_EZOPH_DbLog_splitFn";
+    $hash->{DbLog_splitFn} = "I2C_EZOPRS_DbLog_splitFn";
 }
 
-sub I2C_EZOPH_Define($$) {
+sub I2C_EZOPRS_Define($$) {
 	my ($hash, $def) = @_;
 	my @a = split('[ \t][ \t]*', $def);
 
 	$hash->{STATE} = "defined";
 
 	if ($main::init_done) {
-		eval { I2C_EZOPH_Init( $hash, [ @a[ 2 .. scalar(@a) - 1 ] ] ); };
-		return I2C_EZOPH_Catch($@) if $@;
+		eval { I2C_EZOPRS_Init( $hash, [ @a[ 2 .. scalar(@a) - 1 ] ] ); };
+		return I2C_EZOPRS_Catch($@) if $@;
 	}
 	return undef;
 }
 
-sub I2C_EZOPH_Init($$) {
+sub I2C_EZOPRS_Init($$) {
 	my ( $hash, $args ) = @_;
 	my $name = $hash->{NAME};
 
 	if (defined $args && int(@$args) > 1)
  	{
   	return "Define: Wrong syntax. Usage:\n" .
-         	"define <name> I2C_EZOPH [<i2caddress>]";
+         	"define <name> I2C_EZOPRS [<i2caddress>]";
  	}
 
  	if (defined (my $address = shift @$args)) {
    	$hash->{I2C_Address} = $address =~ /^0.*$/ ? oct($address) : $address;
    	return "$name I2C Address not valid" unless ($address < 128 && $address > 3);
  	} else {
-		$hash->{I2C_Address} = hex(EZOPH_I2C_ADDRESS);
+		$hash->{I2C_Address} = hex(EZOPRS_I2C_ADDRESS);
 	}
 
 	my $msg = '';
@@ -91,7 +91,7 @@ sub I2C_EZOPH_Init($$) {
 	return undef;
 }
 
-sub I2C_EZOPH_Catch($) {
+sub I2C_EZOPRS_Catch($) {
 	my $exception = shift;
 	if ($exception) {
     $exception =~ /^(.*)( at.*FHEM.*)$/;
@@ -100,7 +100,7 @@ sub I2C_EZOPH_Catch($) {
 	return undef;
 }
 
-sub I2C_EZOPH_Attr (@) {
+sub I2C_EZOPRS_Attr (@) {
 	my ($command, $name, $attr, $val) =  @_;
 	my $hash = $defs{$name};
 	my $msg = '';
@@ -108,21 +108,21 @@ sub I2C_EZOPH_Attr (@) {
 		if ($main::init_done and (!defined ($hash->{IODev}) or $hash->{IODev}->{NAME} ne $val)) {
 			main::AssignIoPort($hash,$val);
 			my @def = split (' ',$hash->{DEF});
-			I2C_EZOPH_Init($hash,\@def) if (defined ($hash->{IODev}));
+			I2C_EZOPRS_Init($hash,\@def) if (defined ($hash->{IODev}));
 		}
 	}
 	if ($attr eq 'poll_interval') {
 
 		if ($val > 0) {
 			RemoveInternalTimer($hash);
-			InternalTimer(1, 'I2C_EZOPH_Poll', $hash, 0);
+			InternalTimer(1, 'I2C_EZOPRS_Poll', $hash, 0);
 		} else {
 			$msg = 'Wrong poll intervall defined. poll_interval must be a number > 0';
 		}
 	}
 	if ($attr eq 'DebugLED') {
 		if ($val eq "on" or $val eq "off") {
-			I2C_Set_PHDebugLED($hash,$val);
+			I2C_Set_PRSDebugLED($hash,$val);
 			Log3 $hash, 5, "$hash->{NAME}: set attr DebugLED:";
 		} else {
 			$msg = "$hash->{NAME}: Wrong $attr value. Use on or off";
@@ -131,19 +131,19 @@ sub I2C_EZOPH_Attr (@) {
 	return ($msg) ? $msg : undef;
 }
 
-sub I2C_EZOPH_Poll($) {
+sub I2C_EZOPRS_Poll($) {
 	my ($hash) =  @_;
 	my $name = $hash->{NAME};
 
-	I2C_EZOPH_Set($hash, ($name, "readValues"));
+	I2C_EZOPRS_Set($hash, ($name, "readValues"));
 
 	my $pollInterval = AttrVal($hash->{NAME}, 'poll_interval', 0);
 	if ($pollInterval > 0) {
-		InternalTimer(gettimeofday() + $pollInterval, 'I2C_EZOPH_Poll', $hash, 0);
+		InternalTimer(gettimeofday() + $pollInterval, 'I2C_EZOPRS_Poll', $hash, 0);
 	}
 }
 
-sub I2C_EZOPH_Set($@) {
+sub I2C_EZOPRS_Set($@) {
 	my ($hash, @a) = @_;
 	my $name = $a[0];
 	my $cmd =  $a[1];
@@ -154,33 +154,33 @@ sub I2C_EZOPH_Set($@) {
 	}
 
 	if ($cmd eq "readValues") {
-		I2C_EZOPH_readpH($hash);
+		I2C_EZOPRS_readpH($hash);
 	}
 	if ($cmd eq "TemperaturCompensation") {
-		I2C_SET_PHTEMPCOMP($hash,$val);
+		I2C_SET_PRSTEMPCOMP($hash,$val);
 	}
 	if ($cmd eq "CalibrateReset") {
-		I2C_SET_PHTCALRESET($hash);
+		I2C_SET_PRSTCALRESET($hash);
 	}
 	if ($cmd eq "CalibrateLow") {
-		I2C_SET_PHCALLOW($hash,$val);
+		I2C_SET_PRSCALLOW($hash,$val);
 	}
 	if ($cmd eq "CalibrateMiddle") {
-		I2C_SET_PHCALMID($hash,$val);
+		I2C_SET_PRSCALMID($hash,$val);
 	}
 	if ($cmd eq "CalibrateHigh") {
-		I2C_SET_PHCALHIGH($hash,$val);
+		I2C_SET_PRSCALHIGH($hash,$val);
 	}
 }
 
-sub I2C_EZOPH_Undef($$) {
+sub I2C_EZOPRS_Undef($$) {
 	my ($hash, $arg) = @_;
 
 	RemoveInternalTimer($hash);
 	return undef;
 }
 
-sub I2C_EZOPH_I2CRec ($$) {
+sub I2C_EZOPRS_I2CRec ($$) {
 	my ($hash, $clientmsg) = @_;
 	my $name = $hash->{NAME};
 	my $phash = $hash->{IODev};
@@ -208,7 +208,7 @@ sub I2C_EZOPH_I2CRec ($$) {
     }
 }
 
-sub I2C_EZOPH_readpH($) {
+sub I2C_EZOPRS_readpH($) {
 	my ($hash) = @_;
 	my $name = $hash->{NAME};
   	return "$name: no IO device defined" unless ($hash->{IODev});
@@ -230,7 +230,7 @@ sub I2C_EZOPH_readpH($) {
 	return;
 }
 
-sub I2C_Set_PHDebugLED($) {
+sub I2C_Set_PRSDebugLED($) {
 	my ($hash,$val) = @_;
 	my $name = $hash->{NAME};
   	return "$name: no IO device defined" unless ($hash->{IODev});
@@ -251,7 +251,7 @@ sub I2C_Set_PHDebugLED($) {
 	return;
 }
 
-sub I2C_SET_PHTEMPCOMP($) {
+sub I2C_SET_PRSTEMPCOMP($) {
 	my ($hash,$val) = @_;
 	my $name = $hash->{NAME};
   	return "$name: no IO device defined" unless ($hash->{IODev});
@@ -272,7 +272,7 @@ sub I2C_SET_PHTEMPCOMP($) {
 	return;
 }
 
-sub I2C_SET_PHTCALRESET($) {
+sub I2C_SET_PRSTCALRESET($) {
 	my ($hash) = @_;
 	my $name = $hash->{NAME};
   	return "$name: no IO device defined" unless ($hash->{IODev});
@@ -293,7 +293,7 @@ sub I2C_SET_PHTCALRESET($) {
 	return;
 }
 
-sub I2C_SET_PHCALLOW($) {
+sub I2C_SET_PRSCALLOW($) {
 	my ($hash,$val) = @_;
 	my $name = $hash->{NAME};
   	return "$name: no IO device defined" unless ($hash->{IODev});
@@ -314,7 +314,7 @@ sub I2C_SET_PHCALLOW($) {
 	return;
 }
 
-sub I2C_SET_PHCALMID($) {
+sub I2C_SET_PRSCALMID($) {
 	my ($hash,$val) = @_;
 	my $name = $hash->{NAME};
   	return "$name: no IO device defined" unless ($hash->{IODev});
@@ -335,7 +335,7 @@ sub I2C_SET_PHCALMID($) {
 	return;
 }
 
-sub I2C_SET_PHCALHIGH($) {
+sub I2C_SET_PRSCALHIGH($) {
 	my ($hash,$val) = @_;
 	my $name = $hash->{NAME};
   	return "$name: no IO device defined" unless ($hash->{IODev});
@@ -356,7 +356,7 @@ sub I2C_SET_PHCALHIGH($) {
 	return;
 }
 
-sub I2C_EZOPH_DbLog_splitFn($) {
+sub I2C_EZOPRS_DbLog_splitFn($) {
     my ($event) = @_;
     Log3 undef, 5, "in DbLog_splitFn empfangen: $event";
     my ($reading, $value, $unit) = "";
