@@ -200,8 +200,8 @@ sub I2C_EZOPRS_I2CRec ($$) {
 			my @split1 = split(",", $new);
 
 			readingsBeginUpdate($hash);
-			readingsBulkUpdate($hash,'state','S: ' . $erster . ' pH: ' . $split1[0]);
-			readingsBulkUpdate($hash, 'pH', $split1[0]);
+			readingsBulkUpdate($hash,'state','S: ' . $erster . ' bar: ' . $split1[0]);
+			readingsBulkUpdate($hash, 'bar', $split1[0]);
 			readingsBulkUpdate($hash, 'Status', $erster);
 			readingsEndUpdate($hash, 1);
         }
