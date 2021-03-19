@@ -26,11 +26,11 @@ sub I2C_EZOPRS_DbLog_splitFn($);
 
 my %sets = (
 	"readValues" => 1,
-	"TemperaturCompensation" => "",
-	"CalibrateReset" => 1,
-	"CalibrateLow" => "",
-	"CalibrateMiddle" => "",
-	"CalibrateHigh" => "",
+#	"pressureUnit" => "",
+#	"CalibrateReset" => 1,
+#	"CalibrateLow" => "",
+#	"CalibrateMiddle" => "",
+#	"CalibrateHigh" => "",
 );
 
 sub I2C_EZOPRS_Initialize($) {
@@ -156,8 +156,8 @@ sub I2C_EZOPRS_Set($@) {
 	if ($cmd eq "readValues") {
 		I2C_EZOPRS_readpH($hash);
 	}
-	if ($cmd eq "TemperaturCompensation") {
-		I2C_SET_PRSTEMPCOMP($hash,$val);
+	if ($cmd eq "pressureUnit") {
+		I2C_SET_PRSUNITSET($hash,$val);
 	}
 	if ($cmd eq "CalibrateReset") {
 		I2C_SET_PRSTCALRESET($hash);
@@ -251,23 +251,23 @@ sub I2C_Set_PRSDebugLED($) {
 	return;
 }
 
-sub I2C_SET_PRSTEMPCOMP($) {
+sub I2C_SET_PRSUNITSET($) {
 	my ($hash,$val) = @_;
 	my $name = $hash->{NAME};
   	return "$name: no IO device defined" unless ($hash->{IODev});
   	my $phash = $hash->{IODev};
     my $pname = $phash->{NAME};
 
-	my $debugtempcomp = "T,".$val;
-	my @tempcompascii = unpack("c*", $debugtempcomp); # Wandle String nach ASCII um
-	my $asciistring = join(" ",@tempcompascii);
+	my $pressureUnitSet = "U,".$val;
+	my @pressureunitascii = unpack("c*", $pressureUnitSet); # Wandle String nach ASCII um
+	my $asciistring = join(" ",@pressureunitascii);
 
 	my $i2creq = { i2caddress => $hash->{I2C_Address}, direction => "i2cwrite" };
     $i2creq->{data} = $asciistring;
 	CallFn($pname, "I2CWrtFn", $phash, $i2creq);
 	usleep(300000); # Warte 0,3 Sekunden bis Messung abgeschlossen ist.
 
-	readingsSingleUpdate($hash,"Set_ReadTempComp", $val, 1);
+	readingsSingleUpdate($hash,"pressureUnit", $val, 1);
 
 	return;
 }
