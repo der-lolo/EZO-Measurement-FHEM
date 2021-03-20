@@ -35,7 +35,7 @@ my %sets = (
 	"CalibrateHigh" => "",
 	"sleep" => 1,
 );
-my $sleepmode = "0";
+$sleepmode = "0";
 #my $helper = "Sleep";
 
 sub I2C_EZOPH_Initialize($) {
@@ -139,10 +139,10 @@ sub I2C_EZOPH_Attr (@) {
 sub I2C_EZOPH_Poll($) {
 	my ($hash) =  @_;
 	my $name = $hash->{NAME};
-	if ($sleepmode < "1") {
+	if ($sleepmode > 0) {
 	I2C_EZOPH_Set($hash, ($name, "readValues"));
 	my $pollInterval = AttrVal($hash->{NAME}, 'poll_interval', 0);
-	if ($pollInterval > 0 and $sleepmode < "1") {
+	if ($pollInterval > 0 and $sleepmode < 1) {
 		InternalTimer(gettimeofday() + $pollInterval, 'I2C_EZOPH_Poll', $hash, 0);
 	}
 }
@@ -232,6 +232,7 @@ sub I2C_EZOPH_readpH($) {
 	my $i2cread = { i2caddress => $hash->{I2C_Address}, direction => "i2cread" };
     $i2cread->{nbyte} = 14;
 	$i2cread->{type} = "pH";
+	$sleepmode = 0;
 	CallFn($pname, "I2CWrtFn", $phash, $i2cread);
 	readingsSingleUpdate($hash,"Sleepmode", 0, 0);
 	return;
@@ -252,7 +253,7 @@ sub I2C_Set_PHDebugLED($) {
 	my $i2creq = { i2caddress => $hash->{I2C_Address}, direction => "i2cwrite" };
     $i2creq->{data} = $asciistring;
 	CallFn($pname, "I2CWrtFn", $phash, $i2creq);
-
+	$sleepmode = 0;
 	readingsSingleUpdate($hash,"Set_DebugLED", $debugled, 1);
 	readingsSingleUpdate($hash,"Sleepmode", "0", 0);
 	return;
@@ -273,7 +274,7 @@ sub I2C_SET_PHTEMPCOMP($) {
     $i2creq->{data} = $asciistring;
 	CallFn($pname, "I2CWrtFn", $phash, $i2creq);
 	usleep(300000); # Warte 0,3 Sekunden bis Messung abgeschlossen ist.
-
+	$sleepmode = 0;
 	readingsSingleUpdate($hash,"Set_ReadTempComp", $val, 1);
 	readingsSingleUpdate($hash,"Sleepmode", "0", 0);
 
@@ -295,7 +296,7 @@ sub I2C_SET_PHTCALRESET($) {
     $i2creq->{data} = $asciistring;
 	CallFn($pname, "I2CWrtFn", $phash, $i2creq);
 	usleep(300000); # Warte 0,3 Sekunden bis Messung abgeschlossen ist.
-
+	$sleepmode = 0;
 	readingsSingleUpdate($hash,"Set_pHCalReset", $phcalreset, 1);
 	readingsSingleUpdate($hash,"Sleepmode", "0", 0);
 
@@ -317,7 +318,7 @@ sub I2C_SET_PHCALLOW($) {
     $i2creq->{data} = $asciistring;
 	CallFn($pname, "I2CWrtFn", $phash, $i2creq);
 	usleep(1300000); # Warte 1,3 Sekunden bis Messung abgeschlossen ist.
-
+	$sleepmode = 0;
 	readingsSingleUpdate($hash,"Set_pHCalLow", $phcallow, 1);
 	readingsSingleUpdate($hash,"Sleepmode", "0", 0);
 
@@ -339,7 +340,7 @@ sub I2C_SET_PHCALMID($) {
     $i2creq->{data} = $asciistring;
 	CallFn($pname, "I2CWrtFn", $phash, $i2creq);
 	usleep(1300000); # Warte 1,3 Sekunden bis Messung abgeschlossen ist.
-
+	$sleepmode = 0;
 	readingsSingleUpdate($hash,"Set_pHCalMid", $phcalmid, 1);
 	readingsSingleUpdate($hash,"Sleepmode", "0", 0);
 
@@ -361,7 +362,7 @@ sub I2C_SET_PHCALHIGH($) {
     $i2creq->{data} = $asciistring;
 	CallFn($pname, "I2CWrtFn", $phash, $i2creq);
 	usleep(1300000); # Warte 1,3 Sekunden bis Messung abgeschlossen ist.
-
+	$sleepmode = 0;
 	readingsSingleUpdate($hash,"Set_pHCalHigh", $phcalhigh, 1);
 	readingsSingleUpdate($hash,"Sleepmode", "0", 0);
 
@@ -375,7 +376,7 @@ sub I2C_SET_PHSLEEP($@) {
   	my $phash = $hash->{IODev};
     my $pname = $phash->{NAME};
 
-	my $sleepmode = "1";
+	$sleepmode = 1;
 	my $helper = "Sleep";
 	my @helperascii = unpack("c*", $helper); # Wandle String nach ASCII um
 	my $asciistring = join(" ",@helperascii);
