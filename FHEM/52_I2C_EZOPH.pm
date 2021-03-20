@@ -13,7 +13,7 @@ use warnings;
 use Time::HiRes qw(usleep);
 use Scalar::Util qw(looks_like_number);
 #use Error qw(:try);
-
+$sleepmode = "0";
 use constant {
 	EZOPH_I2C_ADDRESS => '0x63',
 };
@@ -35,7 +35,7 @@ my %sets = (
 	"CalibrateHigh" => "",
 	"sleep" => 1,
 );
-$sleepmode = "0";
+
 #my $helper = "Sleep";
 
 sub I2C_EZOPH_Initialize($) {
