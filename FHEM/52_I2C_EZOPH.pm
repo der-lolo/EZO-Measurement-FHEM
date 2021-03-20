@@ -159,8 +159,8 @@ sub I2C_EZOPH_Set($@) {
 
 	if ($cmd eq "readValues") {
 		$sleepmode = 0;
-		I2C_EZOPH_readpH($hash);
-		#I2C_EZOPH_Poll($hash);
+		#I2C_EZOPH_readpH($hash);
+		I2C_EZOPH_Poll($hash);
 	}
 	if ($cmd eq "TemperaturCompensation") {
 		I2C_SET_PHTEMPCOMP($hash,$val);
