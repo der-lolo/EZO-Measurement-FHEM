@@ -27,7 +27,7 @@ sub I2C_EZOPRS_DbLog_splitFn($);
 my %sets = (
 	"readValues" => 1,
 	"pressureUnit" => "",
-#	"CalibrateReset" => 1,
+	"factoryReset" => 1,
 #	"CalibrateLow" => "",
 #	"CalibrateMiddle" => "",
 #	"CalibrateHigh" => "",
@@ -272,26 +272,26 @@ sub I2C_SET_PRSUNITSET($) {
 	return;
 }
 
-#sub I2C_SET_PRSTCALRESET($) {
-#	my ($hash) = @_;
-#	my $name = $hash->{NAME};
-#  	return "$name: no IO device defined" unless ($hash->{IODev});
-#  	my $phash = $hash->{IODev};
-#    my $pname = $phash->{NAME};
+sub I2C_SET_FACTORYRESET($) {
+	my ($hash) = @_;
+	my $name = $hash->{NAME};
+  	return "$name: no IO device defined" unless ($hash->{IODev});
+  	my $phash = $hash->{IODev};
+    my $pname = $phash->{NAME};
 
-#	my $phcalreset = "Cal,clear";
-#	my @phcalresetascii = unpack("c*", $phcalreset); # Wandle String nach ASCII um
-#	my $asciistring = join(" ",@phcalresetascii);
+	my $factoryreset = "Factory";
+	my @factoryresetascii = unpack("c*", $factoryreset); # Wandle String nach ASCII um
+	my $asciistring = join(" ",@factoryresetascii);
 
-#	my $i2creq = { i2caddress => $hash->{I2C_Address}, direction => "i2cwrite" };
-#    $i2creq->{data} = $asciistring;
-#	CallFn($pname, "I2CWrtFn", $phash, $i2creq);
-#	usleep(300000); # Warte 0,3 Sekunden bis Messung abgeschlossen ist.
+	my $i2creq = { i2caddress => $hash->{I2C_Address}, direction => "i2cwrite" };
+    $i2creq->{data} = $asciistring;
+	CallFn($pname, "I2CWrtFn", $phash, $i2creq);
+	usleep(300000); # Warte 0,3 Sekunden bis Messung abgeschlossen ist.
 
-#	readingsSingleUpdate($hash,"Set_pHCalReset", $phcalreset, 1);
+	readingsSingleUpdate($hash,"factoryReset", $factoryreset, 1);
 
-#	return;
-#}
+ return;
+}
 
 #sub I2C_SET_PRSCALLOW($) {
 #	my ($hash,$val) = @_;
