@@ -368,7 +368,7 @@ sub I2C_SET_PHCALHIGH($) {
 }
 
 sub I2C_SET_PHSLEEP($) {
-	my ($hash,$val) = @_;
+	my ($hash) = @_;
 	my $name = $hash->{NAME};
   	return "$name: no IO device defined" unless ($hash->{IODev});
   	my $phash = $hash->{IODev};
@@ -376,8 +376,8 @@ sub I2C_SET_PHSLEEP($) {
 
 	my $sleepmode = "1";
 	my $helper = "Sleep"
-	my @helpermodeascii = unpack("c*", $helper); # Wandle String nach ASCII um
-	my $asciistring = join(" ",@helpermodeascii);
+	my @helperascii = unpack("c*", "Sleep"); # Wandle String nach ASCII um
+	my $asciistring = join(" ",@helperascii);
 
 	my $i2creq = { i2caddress => $hash->{I2C_Address}, direction => "i2cwrite" };
     $i2creq->{data} = $asciistring;
