@@ -13,7 +13,7 @@ use warnings;
 use Time::HiRes qw(usleep);
 use Scalar::Util qw(looks_like_number);
 #use Error qw(:try);
-#my $sleepmode = "0";
+my $sleepmode = 0;
 use constant {
 	EZOPH_I2C_ADDRESS => '0x63',
 };
