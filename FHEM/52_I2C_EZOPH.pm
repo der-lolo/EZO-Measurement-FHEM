@@ -376,7 +376,7 @@ sub I2C_SET_PHSLEEP($) {
 
 	my $sleepmode = "1";
 	my $helper = "Sleep"
-	my @helperascii = unpack("c*", "Sleep"); # Wandle String nach ASCII um
+	my @helperascii = unpack("c*", $helper); # Wandle String nach ASCII um
 	my $asciistring = join(" ",@helperascii);
 
 	my $i2creq = { i2caddress => $hash->{I2C_Address}, direction => "i2cwrite" };
