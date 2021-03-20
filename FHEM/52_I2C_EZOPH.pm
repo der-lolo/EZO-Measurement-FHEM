@@ -36,6 +36,7 @@ my %sets = (
 	"sleep" => 1,
 );
 my $sleepmode = "0";
+my $helper = "Sleep";
 
 sub I2C_EZOPH_Initialize($) {
 	my ($hash) = @_;
