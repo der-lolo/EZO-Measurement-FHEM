@@ -139,10 +139,10 @@ sub I2C_EZOPH_Attr (@) {
 sub I2C_EZOPH_Poll($) {
 	my ($hash) =  @_;
 	my $name = $hash->{NAME};
-	if ($sleepmode == 0) {
+	if ($sleepmode < 1) {
 	I2C_EZOPH_Set($hash, ($name, "readValues"));
 	my $pollInterval = AttrVal($hash->{NAME}, 'poll_interval', 0);
-	if ($pollInterval > 0 and $sleepmode == 0) {
+	if ($pollInterval > 0 and $sleepmode < 1) {
 		InternalTimer(gettimeofday() + $pollInterval, 'I2C_EZOPH_Poll', $hash, 0);
 	}
 }
