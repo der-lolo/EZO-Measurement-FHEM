@@ -145,7 +145,7 @@ sub I2C_EZOPH_Poll($) {
 		InternalTimer(gettimeofday() + $pollInterval, 'I2C_EZOPH_Poll', $hash, 0);
 	}
 }
-
+}
 sub I2C_EZOPH_Set($@) {
 	my ($hash, @a) = @_;
 	my $name = $a[0];
