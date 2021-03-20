@@ -376,7 +376,7 @@ sub I2C_SET_PHSLEEP($@) {
     my $pname = $phash->{NAME};
 
 	my $sleepmode = "1";
-	my $helper = "Sleep"
+	my $helper = "Sleep";
 	my @helperascii = unpack("c*", $helper); # Wandle String nach ASCII um
 	my $asciistring = join(" ",@helperascii);
 
