@@ -4,7 +4,7 @@ use File::Basename;
 use POSIX qw(strftime);
 use strict;
 
-my @filenames = ( "52_I2C_EZOPH.pm","52_I2C_EZOORP.pm","52_I2C_EZOPRS.pm","CHANGED");
+my @filenames = ( "52_I2C_EZOPH.pm","52_I2C_EZOORP.pm","52_I2C_EZOPRS.pm","CHANGED.txt");
 
 my $prefix = "FHEM";
 my $filename = "";
