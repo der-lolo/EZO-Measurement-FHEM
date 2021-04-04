@@ -174,7 +174,6 @@ sub I2C_EZOPH_Set($@) {
 		I2C_SET_PHCALHIGH($hash,$val);
 	}
 	if ($cmd eq "sleep") {
-		$sleepmode = 1;
 		I2C_SET_PHSLEEP($hash);
 	}
 }
@@ -231,7 +230,6 @@ sub I2C_EZOPH_readpH($) {
 	my $i2cread = { i2caddress => $hash->{I2C_Address}, direction => "i2cread" };
     $i2cread->{nbyte} = 14;
 	$i2cread->{type} = "pH";
-	$sleepmode = 0;
 	CallFn($pname, "I2CWrtFn", $phash, $i2cread);
 	I2C_EZOPH_Poll($hash);
 	return;
@@ -252,7 +250,6 @@ sub I2C_Set_PHDebugLED($) {
 	my $i2creq = { i2caddress => $hash->{I2C_Address}, direction => "i2cwrite" };
     $i2creq->{data} = $asciistring;
 	CallFn($pname, "I2CWrtFn", $phash, $i2creq);
-	$sleepmode = 0;
 	readingsSingleUpdate($hash,"Set_DebugLED", $debugled, 1);
 	return;
 }
